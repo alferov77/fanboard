@@ -1,0 +1,51 @@
+{% extends 'base_generic.html' %}
+{% block content %}
+<div class="container">
+    <h2>Редактировать профиль</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Обновить</button>
+    </form>
+
+    {% if user.is_superuser %}
+    <h3>Администрирование</h3>
+    <a href="{% url 'newsletter_create' %}" class="btn btn-primary">Создать новостную рассылку</a>
+    {% endif %}
+
+
+    <h3>Ваши объявления</h3>
+    <ul>
+        {% for post in posts %}
+            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h3>Отклики на ваши объявления</h3>
+    <form method="get" action="{% url 'profile' %}">
+        <div class="form-group">
+            <label for="post_id">Фильтр по объявлению:</label>
+            <select name="post_id" class="form-control" id="post_id">
+                <option value="">Все объявления</option>
+                {% for post in posts %}
+                    <option value="{{ post.id }}" {% if request.GET.post_id == post.id %}selected{% endif %}>{{ post.title }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Фильтровать</button>
+        </div>
+    </form>
+
+    <ul>
+        {% for response in responses %}
+            <li>
+                {{ response.text }} - от {{ response.author.username }} на объявление <a href="{% url 'post_detail' response.post.pk %}">{{ response.post.title }}</a>
+                <a href="{% url 'response_accept' response.pk %}" class="btn btn-success btn-sm">Принять</a>
+                <a href="{% url 'response_delete' response.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+            </li>
+        {% empty %}
+            <p>Нет откликов.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

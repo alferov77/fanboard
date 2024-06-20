@@ -1,0 +1,17 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div>
+    <h2>Профиль пользователя: {{ profile.username }}</h2>
+    <p>Email: {{ profile.email }}</p>
+    <p>Имя: {{ profile.first_name }} {{ profile.last_name }}</p>
+    <p>Дата рождения: {{ profile.birth_date|date:"Y-m-d" }}</p>
+    <!-- Вывод постов пользователя -->
+    <h3>Посты пользователя:</h3>
+    <ul>
+        {% for post in posts %}
+        <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

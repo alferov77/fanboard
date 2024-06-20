@@ -1,0 +1,18 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h2>Отклики на мои объявления</h2>
+<div class="responses">
+    {% for response in responses %}
+    <div class="response">
+        <p>{{ response.text }}</p>
+        <p>От: {{ response.author.username }}</p>
+        <p>На объявление: <a href="{% url 'post_detail' response.post.pk %}">{{ response.post.title }}</a></p>
+        <a href="{% url 'delete_response' response.pk %}" class="btn btn-danger">Удалить</a>
+        <a href="{% url 'accept_response' response.pk %}" class="btn btn-success">Принять</a>
+    </div>
+    {% empty %}
+    <p>Нет откликов.</p>
+    {% endfor %}
+</div>
+{% endblock %}

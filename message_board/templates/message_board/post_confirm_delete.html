@@ -1,0 +1,16 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Вы уверены, что хотите удалить этот пост?</h2>
+    <div>
+        <strong>{{ post.title }}</strong>
+        <p>{{ post.content }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="submit" value="Удалить" class="btn btn-danger">
+            <a href="{% url 'post_list' %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

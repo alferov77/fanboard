@@ -1,0 +1,28 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Добро пожаловать на доску объявлений!</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'post_list' %}">Смотреть объявления</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'post_create' %}">Добавить объявление</a></li>
+            <li><a href="{% url 'profile' %}">Профиль</a></li>
+            <li><a href="{% url 'logout' %}">Выйти</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Войти</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+<main>
+    <p>Это главная страница нашего сайта. Здесь вы можете узнать последние новости и обновления.</p>
+    <!-- Здесь может быть дополнительный контент, например список последних объявлений -->
+</main>
+<footer>
+    <p>&copy; 2024 Message Board. Все права защищены.</p>
+</footer>
+{% endblock %}

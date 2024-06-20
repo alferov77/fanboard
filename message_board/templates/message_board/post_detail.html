@@ -1,0 +1,43 @@
+{% extends 'base_generic.html' %}
+{% load static %}
+
+{% block content %}
+<div class="post-detail">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p><strong>Автор:</strong> <a href="{% url 'user_profile' post.author.pk %}">{{ post.author.username }}</a></p>
+    <p><strong>Дата публикации:</strong> {{ post.created_at|date:"d M Y H:i" }}</p>
+    <p><strong>Категория:</strong> <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.name }}</a></p>
+
+    <!-- Галерея изображений -->
+    <div class="post-images">
+        {% for image in post.images.all %}
+            <img src="{{ image.image.url }}" alt="Image for {{ post.title }}" style="width: 100%; max-width: 300px; height: auto;">
+        {% empty %}
+            <p>No images available.</p>
+        {% endfor %}
+    </div>
+
+    {% if post.author.avatar %}
+        <img src="{{ post.author.avatar.url }}" alt="Avatar of {{ post.author.username }}" style="width: 100px; height: auto;">
+    {% else %}
+        <img src="{% static 'default-avatar.png' %}" alt="Default Avatar" style="width: 100px; height: auto;">
+    {% endif %}
+    {% if post.video_url %}
+        <iframe src="{{ post.video_url }}" width="300" height="200" frameborder="0" allowfullscreen></iframe>
+    {% endif %}
+
+    <!-- Ссылка на профиль -->
+    <p>Автор: <a href="{% url 'user_profile' pk=post.author.pk %}">{{ post.author.username }}</a></p>
+    <!-- Комментарий -->
+    <a href="{% url 'add_response' post.id %}">Ответить на объявление</a>
+
+    <!-- Кнопка "Вернуться к списку сообщений" -->
+    <div class="mt-3">
+        <a href="{% url 'post_list' %}" class="btn btn-primary">Вернуться к списку сообщений</a>
+    </div>
+</div>
+{% endblock %}
+
+
+

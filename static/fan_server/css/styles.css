@@ -1,0 +1,116 @@
+/* Основные настройки шрифта и фона для всей страницы */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Стилизация шапки и подвала */
+header, footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+header h1, footer p {
+    margin: 0;  /* Убираем стандартные отступы */
+}
+
+/* Навигация */
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Основное содержимое */
+.main {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+    color: #333;
+}
+
+/* Ссылки */
+a {
+    color: #0275d8; /* Синий цвет для всех ссылок */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Кнопки */
+button, .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: #0275d8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover, .btn:hover {
+    background-color: #025aa5; /* Темнее синего при наведении */
+}
+
+/* Стиль для сообщений об ошибке или уведомлений */
+.alert {
+    padding: 20px;
+    background-color: #f44336; /* Красный фон */
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* Контейнеры и раскладка */
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.col-md-3, .col-md-6, .col-md-9 {
+    flex: none;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    nav ul {
+        text-align: center;
+        padding: 0;
+    }
+
+    nav ul li {
+        display: block;
+        margin-bottom: 10px;
+    }
+}

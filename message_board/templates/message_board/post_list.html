@@ -1,0 +1,93 @@
+{% extends 'base_generic.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Колонка с категориями -->
+        <div class="col-md-3">
+            <div class="categories-sidebar">
+                <h3>Категории</h3>
+                <ul>
+                    {% for category in categories %}
+                        <li><a href="{% url 'category_posts' category.pk %}">{{ category.name }}</a></li>
+                    {% empty %}
+                        <li>No categories available.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Колонка с постами -->
+        <div class="col-md-6">
+            <!-- Кнопка создания нового сообщения -->
+            <div class="mb-3">
+                <a href="{% url 'post_create' %}" class="btn btn-success">Создать новое сообщение</a>
+            </div>
+
+            {% for post in posts %}
+                <div class="post-preview">
+                    {% if post.author.avatar %}
+                        <img src="{{ post.author.avatar.url }}" alt="Avatar of {{ post.author.username }}" style="width: 50px; height: auto;">
+                    {% else %}
+                        <img src="{% static 'fan_server/images/default-avatar.png' %}" alt="Default Avatar" style="width: 50px; height: auto;">
+                    {% endif %}
+                    <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title|truncatechars:20 }}</a></h2>
+                    <p>Автор: <a href="{% url 'user_profile' post.author.pk %}">{{ post.author.username }}</a></p>
+                    <p>{{ post.content|truncatechars:100 }}</p>
+                    <p><small>Опубликовано: {{ post.created_at|date:"d M Y H:i" }}</small></p>
+                    <p>Категория: <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.name }}</a></p>
+                    <a href="{% url 'post_update' post.pk %}">Edit</a>
+                    <a href="{% url 'post_delete' post.pk %}">Delete</a>
+                </div>
+            {% empty %}
+                <p>No posts available.</p>
+            {% endfor %}
+
+            <!-- Пагинация -->
+            {% if page_obj.has_previous %}
+                <a href="?page=1">1</a>
+                {% if page_obj.previous_page_number != 1 %}
+                    ...
+                    <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                {% endif %}
+            {% endif %}
+
+            {{ page_obj.number }}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                {% if paginator.num_pages != page_obj.next_page_number %}
+                    ...
+                    <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Колонка с фильтрацией -->
+        <div class="col-md-3">
+            <div class="filter-sidebar">
+                <h3>Filter Posts</h3>
+                <form method="get" action="{% url 'post_list' %}">
+                    <div class="form-group">
+                        <label for="search-box">Search:</label>
+                        <input type="text" name="q" class="form-control" id="search-box" placeholder="Search posts">
+                    </div>
+                    <div class="form-group">
+                        <label for="category-select">Category:</label>
+                        <select name="category" class="form-control" id="category-select">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                                <option value="{{ category.pk }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

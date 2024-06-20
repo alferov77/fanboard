@@ -1,0 +1,12 @@
+{% extends 'base_generic.html' %}
+{% block content %}
+<div class="container">
+    <h2>Принятие отклика</h2>
+    <p>Вы уверены, что хотите принять этот отклик?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Принять</button>
+        <a href="{{ success_url }}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}
