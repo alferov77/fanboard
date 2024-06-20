@@ -38,10 +38,14 @@
     <ul>
         {% for response in responses %}
             <li>
-                {{ response.text }} - от {{ response.author.username }} на объявление <a href="{% url 'post_detail' response.post.pk %}">{{ response.post.title }}</a>
+            {{ response.text }} – от {{ response.author.username }} на объявление <a href="{% url 'post_detail' response.post.pk %}">{{ response.post.title }}</a>
+            {% if response.accepted %}
+                <span class="badge bg-success">Принят</span>
+            {% else %}
                 <a href="{% url 'response_accept' response.pk %}" class="btn btn-success btn-sm">Принять</a>
-                <a href="{% url 'response_delete' response.pk %}" class="btn btn-danger btn-sm">Удалить</a>
-            </li>
+            {% endif %}
+            <a href="{% url 'response_delete' response.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+        </li>
         {% empty %}
             <p>Нет откликов.</p>
         {% endfor %}
