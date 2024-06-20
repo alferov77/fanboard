@@ -42,9 +42,9 @@
             {% if response.accepted %}
                 <span class="badge bg-success">Принят</span>
             {% else %}
-                <a href="{% url 'response_accept' response.pk %}" class="btn btn-success btn-sm">Принять</a>
+                <a href="{% url 'accept_response' response.pk %}" class="btn btn-success btn-sm">Принять</a>
             {% endif %}
-            <a href="{% url 'response_delete' response.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+            <a href="{% url 'delete_response' response.pk %}" class="btn btn-danger btn-sm">Удалить</a>
         </li>
         {% empty %}
             <p>Нет откликов.</p>

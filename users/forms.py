@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.mail import send_mail
+
 from .models import CustomUser, Newsletter
 
 import logging
@@ -16,6 +18,14 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.is_active = False
             user.save()
+            user.generate_confirmation_code()
+            send_mail(
+                'Код подтверждения',
+                f'Ваш код подтверждения: {user.confirmation_code}',
+                'from@example.com',
+                [user.email],
+                fail_silently=False,
+            )
         return user
 
 class CustomUserChangeForm(UserChangeForm):
@@ -30,7 +40,6 @@ class CustomUserChangeForm(UserChangeForm):
             'birth_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
-
 class ProfileForm(forms.ModelForm):
     email = forms.EmailField(widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
@@ -41,14 +50,15 @@ class ProfileForm(forms.ModelForm):
             'birth_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
-
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
 
-
 class NewsletterForm(forms.ModelForm):
     class Meta:
         model = Newsletter
         fields = ['subject', 'message']
+
+class ConfirmationForm(forms.Form):
+    code = forms.CharField(max_length=4, label='Код подтверждения')

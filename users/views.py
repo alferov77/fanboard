@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView, FormView, DeleteView
 from .models import CustomUser, Newsletter
-from .forms import CustomUserCreationForm, ProfileForm, ContactForm
+from .forms import CustomUserCreationForm, ProfileForm, ContactForm, ConfirmationForm
 from message_board.models import Post
 from responses.models import Responses
 from django.contrib import messages
@@ -16,21 +16,25 @@ User = get_user_model()
 class RegisterView(CreateView):
     template_name = 'users/register.html'
     form_class = CustomUserCreationForm
+    success_url = reverse_lazy('confirm_email')
+
+class ConfirmEmailView(FormView):
+    template_name = 'users/confirm_email.html'
+    form_class = ConfirmationForm
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        user = self.object
-        user.is_active = False
-        user.save()
-        send_mail(
-            'Подтверждение регистрации',
-            'Пожалуйста, подтвердите вашу регистрацию, перейдя по ссылке.',
-            'from@example.com',
-            [user.email],
-            fail_silently=False,
-        )
-        return response
+        code = form.cleaned_data['code']
+        try:
+            user = User.objects.get(confirmation_code=code)
+            user.is_active = True
+            user.email_verified = True
+            user.confirmation_code = None
+            user.save()
+            return super().form_valid(form)
+        except User.DoesNotExist:
+            form.add_error('code', 'Неверный код подтверждения')
+            return self.form_invalid(form)
 
 class LoginView(auth_views.LoginView):
     template_name = 'users/login.html'

@@ -1,3 +1,4 @@
+import random
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
@@ -7,6 +8,12 @@ from django.core.mail import send_mail
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    email_verified = models.BooleanField(default=False)
+    confirmation_code = models.CharField(max_length=4, blank=True, null=True)
+
+    def generate_confirmation_code(self):
+        self.confirmation_code = str(random.randint(1000, 9999))
+        self.save()
 
     def __str__(self):
         return self.username

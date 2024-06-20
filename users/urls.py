@@ -1,9 +1,12 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import RegisterView, LoginView, LogoutView, ProfileView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, ContactView, UserProfileView, NewsletterCreateView
+from .views import RegisterView, LoginView, LogoutView, ProfileView, PasswordChangeView, PasswordChangeDoneView, \
+    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, ContactView, \
+    UserProfileView, NewsletterCreateView, ConfirmEmailView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
+    path('confirm-email/', ConfirmEmailView.as_view(), name='confirm_email'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('profile/', ProfileView.as_view(), name='profile'),
